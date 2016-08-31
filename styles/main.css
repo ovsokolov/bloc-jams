@@ -18,9 +18,10 @@ html {
 @media (min-width: 640px) {
     html { font-size: 112%; }
     
-    .container {
-        margin: 0 auto;
-        max-width: 64rem;
+    .column {
+        float: left;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
     
     .column.full { width: 100%; }
