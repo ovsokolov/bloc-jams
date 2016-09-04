@@ -91,6 +91,15 @@ var albums = [albumPicasso, albumMarconi, albumScorpions];
  };
 
  var findParentByClassName = function(element, className) {
+     //alert(element.tagName);
+     if(element.parentElement == null || element.parentElement == undefined){
+         alert("No parent found");
+         return;
+     }
+     if(element.tagName == "BODY"){
+         alert("No parent found with that class name");
+         return;
+     }
      var parentElement = element.parentElement;
      //alert(parentElement.className + " eq " + className);
      if(className === parentElement.className){
