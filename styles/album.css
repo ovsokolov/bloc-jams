@@ -7,10 +7,15 @@
  }
  
  .album-cover-art {
-     position: relative;
-     left: 20%;
-     margin-top: 1rem;
-     width: 60%;
+    position: relative;
+    left: 20%;
+    margin-top: 1rem;
+    width: 60%;
+    
+    transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+
  }
  
  .album-view-details {

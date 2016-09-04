@@ -1,4 +1,6 @@
- var albumPicasso = {
+var curentAlbum = -1;
+
+var albumPicasso = {
      title: 'The Colors',
      artist: 'Pablo Picasso',
      label: 'Cubism',
@@ -29,6 +31,23 @@
      ]
  };
 
+ // Scorpins Album
+ var albumScorpions = {
+     title: 'Blackout',
+     artist: 'Scorpions',
+     label: 'Mercury ',
+     year: '1982',
+     albumArtUrl: 'assets/images/album_covers/22.png',
+     songs: [
+         { title: 'Blackout', duration: '3:49' },
+         { title: "Can't Live Without You", duration: '3:47' },
+         { title: 'No One Like You', duration: '3:57'},
+         { title: 'You Give Me All I Need', duration: '3:39' },
+         { title: 'Now!', duration: '2:35'}
+     ]
+ };
+
+
  var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
@@ -41,7 +60,9 @@
      return template;
  };
 
- var setCurrentAlbum = function(album) {
+var albums = [albumPicasso, albumMarconi, albumScorpions];
+
+ var setCurrentAlbum = function(album, cnt) {
      // #1
      var albumTitle = document.getElementsByClassName('album-view-title')[0];
      var albumArtist = document.getElementsByClassName('album-view-artist')[0];
@@ -53,7 +74,11 @@
      albumTitle.firstChild.nodeValue = album.title;
      albumArtist.firstChild.nodeValue = album.artist;
      albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
+     //albumImage.style.transform = "scale(0.2)";
      albumImage.setAttribute('src', album.albumArtUrl);
+     //albumImage.style.transform = albumImage.style.transform == "scale(0.5)"?"scale(1.0)":"scale(0.5)";
+     //albumImage.style.transform = "scale(1.0)";
+
  
      // #3
      albumSongList.innerHTML = '';
@@ -65,5 +90,12 @@
  };
  
  window.onload = function() {
-     setCurrentAlbum(albumMarconi);
+     setCurrentAlbum(albumPicasso);
+     curentAlbum = 0;
  };
+
+function changeAlbum(){
+    curentAlbum++;
+    curentAlbum = curentAlbum % albums.length;
+    setCurrentAlbum(albums[curentAlbum], curentAlbum);
+}
