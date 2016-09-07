@@ -23,18 +23,12 @@ var createSongRow = function(songNumber, songName, songLength) {
      var $row = $(template);
      
      var clickHandler = function() {
-         //var songItem = getSongItem(targetElement);
-         //alert(songItem.getAttribute('data-song-number'));
-         //alert("here");
-         //alert($(this).parentElement);
          
          // my solution
          if (currentlyPlayingSongNumber === null) {
              //alert("1");
              $(this).html(pauseButtonTemplate);
-             currentlyPlayingSongNumber = $(this).attr('data-song-number');
-             var currentAlbumObj = albums[curentAlbum];
-             currentSongFromAlbum = currentAlbumObj.songs[currentlyPlayingSongNumber - 1];
+             setSong($(this).attr('data-song-number'));
              updatePlayerBarSong();
          } else if (currentlyPlayingSongNumber === $(this).attr('data-song-number')) {
              //alert("2");
@@ -43,12 +37,10 @@ var createSongRow = function(songNumber, songName, songLength) {
              currentSongFromAlbum = null;
              $('.main-controls .play-pause').html(playerBarPlayButton)
          } else if (currentlyPlayingSongNumber !== $(this).attr('data-song-number')) {
-             var $currentlyPlayingSongElement = $('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+             var $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
              $currentlyPlayingSongElement.html($currentlyPlayingSongElement.attr('data-song-number'));
              $(this).html(pauseButtonTemplate);
-             currentlyPlayingSongNumber = $(this).attr('data-song-number');
-             var currentAlbumObj = albums[curentAlbum];
-             currentSongFromAlbum = currentAlbumObj.songs[currentlyPlayingSongNumber-1];
+             setSong($(this).attr('data-song-number'));
              updatePlayerBarSong();
          }
 
@@ -103,7 +95,6 @@ var albums = [albumPicasso, albumMarconi, albumScorpions];
  
      // #4
      for (var i = 0; i < album.songs.length; i++) {
-         //albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
          var $newRow = createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
          $albumSongList.append($newRow);
      }
@@ -118,7 +109,7 @@ var albums = [albumPicasso, albumMarconi, albumScorpions];
      //set back currently playing  song 
       var tmpNumber = currentlyPlayingSongNumber;
      
-     var $currentlyPlayingSongElement = $('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+     var $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
      $currentlyPlayingSongElement.html($currentlyPlayingSongElement.attr('data-song-number'));
      
      //find previous song
@@ -134,7 +125,7 @@ var albums = [albumPicasso, albumMarconi, albumScorpions];
      currentSongFromAlbum = currentAlbumObj.songs[currentlyPlayingSongNumber - 1];
      
      //set previos song icon
-     $currentlyPlayingSongElement = $('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+     $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
      $currentlyPlayingSongElement.html(pauseButtonTemplate);
      
      updatePlayerBarSong();
@@ -145,7 +136,7 @@ var albums = [albumPicasso, albumMarconi, albumScorpions];
 var nextSong = function() {
       var tmpNumber = currentlyPlayingSongNumber;
      
-     var $currentlyPlayingSongElement = $('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+     var $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
      $currentlyPlayingSongElement.html($currentlyPlayingSongElement.attr('data-song-number'));
      
      //find previous song
@@ -159,7 +150,7 @@ var nextSong = function() {
      currentSongFromAlbum = currentAlbumObj.songs[currentlyPlayingSongNumber - 1];
      
      //set previos song icon
-     $currentlyPlayingSongElement = $('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+     $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
      $currentlyPlayingSongElement.html(pauseButtonTemplate);
      
      updatePlayerBarSong();
@@ -188,4 +179,15 @@ var updatePlayerBarSong = function(){
     $(".artist-song-mobile").text(song + " - " + artist);
     $(".artist-name").text(artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+};
+
+var setSong = function(songNumber){
+    currentlyPlayingSongNumber = songNumber;
+    var currentAlbumObj = albums[curentAlbum];
+    currentSongFromAlbum = currentAlbumObj.songs[songNumber - 1];   
+};
+
+var getSongNumberCell = function(songNumber){
+    var $currentlyPlayingSongElement = $('[data-song-number="' + songNumber + '"]');
+    return $currentlyPlayingSongElement;
 };
