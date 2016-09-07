@@ -12,6 +12,7 @@ var playerBarPauseButton = '<span class="ion-pause"></span>';
 
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
+var $playPauseButton = $('.main-controls .play-pause');
 
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
@@ -39,11 +40,11 @@ var createSongRow = function(songNumber, songName, songLength) {
              if(currentSoundFile.isPaused()){
                 currentSoundFile.play();
                 $(this).html(pauseButtonTemplate);
-                $('.main-controls .play-pause').html(playerBarPauseButton)                
+                $playPauseButton.html(playerBarPauseButton)                
              }else{
                 currentSoundFile.pause();
                 $(this).html(playButtonTemplate);
-                $('.main-controls .play-pause').html(playerBarPlayButton)
+                $playPauseButton.html(playerBarPlayButton)
              }
          } else if ( parseInt(currentlyPlayingSongNumber) !== parseInt($(this).attr('data-song-number')) ) {
              //alert("3");
@@ -170,6 +171,7 @@ $(document).ready(function(){
 
      $previousButton.click(previousSong);
      $nextButton.click(nextSong);
+     $playPauseButton.click(togglePlayFromPlayerBar);
  });
 
 
@@ -186,7 +188,7 @@ var updatePlayerBarSong = function(){
     $(".song-name").text(song);
     $(".artist-song-mobile").text(song + " - " + artist);
     $(".artist-name").text(artist);
-    $('.main-controls .play-pause').html(playerBarPauseButton);
+    $playPauseButton.html(playerBarPauseButton);
 };
 
 var setSong = function(songNumber){
@@ -217,3 +219,18 @@ var getSongNumberCell = function(songNumber){
          currentSoundFile.setVolume(volume);
      }
  };
+
+var togglePlayFromPlayerBar = function() {
+     if (currentSoundFile == null){
+         return;
+     }
+     if(currentSoundFile.isPaused()){
+        currentSoundFile.play();
+        getSongNumberCell(currentlyPlayingSongNumber).html(pauseButtonTemplate);
+        $playPauseButton.html(playerBarPauseButton)                
+     }else{
+        currentSoundFile.pause();
+        getSongNumberCell(currentlyPlayingSongNumber).html(playButtonTemplate);
+        $playPauseButton.html(playerBarPlayButton)
+     }   
+};
