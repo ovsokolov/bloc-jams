@@ -19,7 +19,7 @@ var createSongRow = function(songNumber, songName, songLength) {
         '<tr class="album-view-song-item">'
       + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
       + '  <td class="song-item-title">' + songName + '</td>'
-      + '  <td class="song-item-duration">' + songLength + '</td>'
+      + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
       + '</tr>'
       ;
  
@@ -43,11 +43,11 @@ var createSongRow = function(songNumber, songName, songLength) {
                 currentSoundFile.play();
                 updateSeekBarWhileSongPlays();
                 $(this).html(pauseButtonTemplate);
-                $playPauseButton.html(playerBarPauseButton)                
+                $playPauseButton.html(playerBarPauseButton);                
              }else{
                 currentSoundFile.pause();
                 $(this).html(playButtonTemplate);
-                $playPauseButton.html(playerBarPlayButton)
+                $playPauseButton.html(playerBarPlayButton);
              }
          } else if ( parseInt(currentlyPlayingSongNumber) !== parseInt($(this).attr('data-song-number')) ) {
              //alert("3");
@@ -197,6 +197,7 @@ var updatePlayerBarSong = function(){
     $(".artist-song-mobile").text(song + " - " + artist);
     $(".artist-name").text(artist);
     $playPauseButton.html(playerBarPauseButton);
+    setTotalTimeInPlayerBar(currentSongFromAlbum.duration);
 };
 
 var setSong = function(songNumber){
@@ -310,6 +311,14 @@ var togglePlayFromPlayerBar = function() {
              var $seekBar = $('.seek-control .seek-bar');
  
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(this.getTime());
+         });
+         
+         currentSoundFile.bind('ended', function(event) {
+             // #11
+             var $currentlyPlayingSongElement = getSongNumberCell(currentlyPlayingSongNumber);
+             $currentlyPlayingSongElement.html(playButtonTemplate);
+             $playPauseButton.html(playerBarPlayButton);
          });
      }
  };
@@ -334,4 +343,21 @@ var togglePlayFromPlayerBar = function() {
     $seekBar.find('.fill').width(percentageString);
     $seekBar.find('.thumb').css({left: percentageString});
  };
+
+var setCurrentTimeInPlayerBar = function(currentTime){
+    var $time = $('.current-time');
+    $time.text(filterTimeCode(currentTime));
+};
+
+var setTotalTimeInPlayerBar = function(totalTime){
+    var $time = $('.total-time');
+    $time.text(filterTimeCode(totalTime));
+};
+
+var filterTimeCode = function(timeInSeconds){
+    var totalSeconds = parseFloat(timeInSeconds);
+    var seconds = "0" + Math.floor(totalSeconds % 60);
+    return Math.floor(totalSeconds / 60) + ":" + seconds.substr(seconds.length - 2);
+};
+
 
